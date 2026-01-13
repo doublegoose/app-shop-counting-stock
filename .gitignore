@@ -1,0 +1,13 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+wheels/
+*.egg-info
+_py_
+data/
+stock.db
+viewsql.py
+
+# Virtual environments
+.venv
+.vscode

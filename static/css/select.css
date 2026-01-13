@@ -1,0 +1,130 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+@property --hue {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 180deg;
+}
+
+@keyframes rotateHue {
+  0% {
+    --hue: 180deg;
+  }
+  25% {
+    --hue: 360deg;
+  }
+  100% {
+    --hue: 180deg;
+  }
+}
+
+select {
+  appearance: none;
+  @supports (appearance: base-select) {
+    &,
+    &::picker(select) {
+      appearance: base-select;
+      animation: rotateHue 10s infinite;
+    }
+  }
+}
+
+select {
+  display: flex;
+  justify-content: space-between;
+  min-width: 20px;
+  align-items: center;
+  color: black;
+  padding-block: 7px;
+  padding-inline: 20px 30px;
+  border-radius: 15px;
+
+  cursor: pointer;
+  background: #C7CCC7;
+
+
+  @supports (appearance: base-select) {
+    padding-inline: 15px;
+    background-image: none; /* Remove original arrow option */
+    img {
+      width: 30px;
+      line-height: 1;
+    }
+    &::picker-icon {
+      content: "";
+      width: 15px;
+      height: 15px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='%23000' class='size-6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5' /%3E%3C/svg%3E%0A");
+      transition: rotate 0.2s ease-out;
+    }
+    &:open::picker-icon {
+      rotate: 180deg;
+    }
+    &::picker(select) {
+      padding: 0;
+      margin-top: 5px;
+      border: 4px solid #1D201D;
+      background: #C7CCC7;
+      border-radius: 10px;
+      font-weight: semi-bold;
+      opacity: 0;
+      height: 0;
+      overflow: clip;
+      transition: height 0.5s ease-out, opacity 0.5s ease-out, overlay 0.5s,
+        display 0.5s;
+      transition-behavior: allow-discrete;
+    }
+    &:open::picker(select) {
+      opacity: 1;
+      height: calc-size(auto, size);
+      overflow: auto;
+      @starting-style {
+        opacity: 0;
+        height: 0;
+      }
+    }
+    option {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 10px;
+      gap: 10px;
+      border-top: 1px solid #444;
+      &:where(:hover, :focus, :active) {
+        background: #4B534B;
+        color: white;
+        font-weight: bold;
+      }
+      &:checked {
+        background: #50C878;
+        color: white;
+        font-weight: bold;
+      }
+      &::checkmark {
+        display: none; /* Remove original active option */
+      }
+    }
+    selectedcontent {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+}
+
+.my-button {
+  width: 150px; /* กำหนดความกว้าง */
+  height: 40px; /* กำหนดความสูง */
+  font-size: 18px; /* ปรับขนาดตัวอักษรได้ */
+  padding: 1px 20px; /* เพิ่มระยะห่างภายใน */
+}
+
+
+.custom-textbox {
+  width: 300px; /* กำหนดความกว้าง 250 พิกเซล */
+  height: 80px; /* กำหนดความสูง 100 พิกเซล */
+  font-size: 25px; /* กำหนดขนาดตัวอักษร 16px */
+  padding: 10px; /* เพิ่มระยะห่างภายใน */
+  border: 1px solid #ccc; /* เพิ่มเส้นขอบ */
+  box-sizing: border-box; /* ให้ padding และ border รวมอยู่ใน width/height */
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Shop inventory counter</title>
+
+    <!-- DataTables CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/select.css') }}">
+
+    <style>
+        table {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h3>สร้างเอกสารนับสต็อก</h3>
+<form method="post">
+    <select name="branch_code" onchange="setName(this)">
+        {% for b in branches %}
+        <option value="{{ b.BrchID }}">{{ b.BrchName }}</option>
+        {% endfor %}
+    </select><br>
+    <input type="hidden" name="branch_name" id="branch_name">
+    <button class="my-button">สร้างเอกสาร</button>
+</form>
+
+<hr>
+
+<h3>เอกสารที่มีอยู่</h3>
+
+<table id="stockTable" class="display">
+    <thead>
+       <tr>
+            <th>เลขที่เอกสาร</th>
+            <th>สาขา</th>
+            <th>select</th>
+            <th>end</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in docs %}
+          <tr>
+            <td>{{ d[0] }}</td>
+            <td>{{ d[1] }}</td>
+            <td><a href="/count/{{ d[0] }}">เข้าไปนับ</a></td>
+            <td><a href="{{ url_for('delete', doc_no=d[0]) }}"
+                onclick="return confirm('คุณต้องการจบการทำงานใช่หรือไม่?');">จบการทำงาน</a></td>
+          </tr>
+          {% endfor %}
+    </tbody>
+</table>
+
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename='/js/jquery-3.7.1.js') }}"></script>
+    <!-- DataTables JS -->
+    <script src="{{ url_for('static', filename='/js/dataTables.js') }}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#stockTable').DataTable({
+                "pageLength": 10,      // จำนวนแถวต่อหน้า
+                "lengthMenu": [10, 25, 50],
+                "ordering": true,
+                "searching": true     // ช่องค้นหาอัตโนมัติ
+            });
+        });
+    </script>
+
+<!-- <ul>                                                                       -->
+<!-- {% for d in docs %}                                                        -->
+<!--   <li>                                                                     -->
+<!--     {{ d[0] }} | {{ d[1] }}                                                -->
+<!--     <a href="/count/{{ d[0] }}">เข้าไปนับ</a>&nbsp;                          -->
+<!--     <a href="{{ url_for('delete', doc_no=d[0]) }}"                         -->
+<!--    onclick="return confirm('คุณต้องการจบการทำงานใช่หรือไม่?');">จบการทำงาน</a>  -->
+<!--   </li>                                                                    -->
+<!-- {% endfor %}                                                               -->
+<!-- </ul>                                                                      -->
+
+<script>
+function setName(sel){
+  document.getElementById("branch_name").value =
+    sel.options[sel.selectedIndex].text;
+}
+</script>
+
+
+</body>
+</html>

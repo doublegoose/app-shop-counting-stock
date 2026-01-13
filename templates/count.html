@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Shop inventory counter</title>
+
+    <!-- DataTables CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/select.css') }}">
+
+    <style>
+        table {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h3>เอกสาร: {{ doc_no }}</h3>
+<h4>สาขา: {{ branch_name }}</h4>
+<a href="{{ url_for('export_excel', doc_no=doc_no) }}">
+    <button type="button" class="my-button">Export Excel</button>
+</a>
+
+
+<form method="post" id="stockForm">
+    Location:
+    <select name="location" id="location">
+        <option>ที่ราวแขวน</option>
+        <option>สต็อกหลังร้าน</option>
+        <option>สต็อกหน้าร้าน</option>
+    </select>
+    <br><br>
+    <input name="barcode" id="barcode" class="custom-textbox" autofocus
+           placeholder="ยิงบาร์โค้ดแล้วกด Enter">
+</form>
+
+{% if msg %}<p>{{ msg }}</p>{% endif %}
+
+<table id="stockTable" class="display">
+    <thead>
+       <tr>
+            <th>Location</th>
+            <th>Barcode</th>
+            <th>ItemCode</th>
+            <th>ItemName</th>
+            <th>Qty</th>
+            <th>Unit</th>
+        </tr>
+    </thead>
+    {% for c in counts %}
+    <tbody>
+        <tr>
+            <td>{{ c[0] }}</td>
+            <td>{{ c[1] }}</td>
+            <td>{{ c[2] }}</td>
+            <td>{{ c[3] }}</td>
+            <td>{{ c[4] }}</td>
+            <td>{{ c[5] }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+</table>
+
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename='/js/jquery-3.7.1.js') }}"></script>
+    <!-- DataTables JS -->
+    <script src="{{ url_for('static', filename='/js/dataTables.js') }}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#stockTable').DataTable({
+                "pageLength": 10,      // จำนวนแถวต่อหน้า
+                "lengthMenu": [10, 25, 50],
+                "ordering": true,
+                "searching": true     // ช่องค้นหาอัตโนมัติ
+            });
+        });
+    </script>
+
+<br>
+<a href="/">⬅ กลับหน้าเอกสาร</a>
+
+<script>
+const select = document.getElementById("location");
+
+// โหลดค่าเดิม
+select.value = localStorage.getItem("location");
+
+// เปลี่ยนค่าแล้วบันทึก
+select.addEventListener("change", function () {
+    localStorage.setItem("location", this.value);
+});
+
+document.getElementById("barcode").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+        const location = document.getElementById("location").value;
+
+        if (location === "") {
+            e.preventDefault(); // หยุด submit
+            alert("กรุณาเลือก Location ก่อน");
+            document.getElementById("location").focus();
+        }
+    }
+});
+</script>
+
+
+
+</body>
+</html>
