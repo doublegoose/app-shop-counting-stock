@@ -49,6 +49,7 @@ def get_branches():
                     SELECT
                         BrchID, BrchName 
                     FROM EMBrch
+                    WHERE BrchAddr3Eng = 'Y'
                     ORDER BY BrchCode
                     """)   
     cursor.execute(get_brch)
